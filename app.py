@@ -27,7 +27,7 @@ def get_db():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://65070030-iot-cafe.vercel.app"],
+    allow_origins=["https://65070030-iot-cafe.vercel.app/", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -209,6 +209,7 @@ async def delete_book(book_id: int, db: Session = Depends(get_db)):
     book = db.query(models.Book).filter(models.Book.id == book_id).first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
+
     db.delete(book)
     db.commit()
     return {"message": "Book deleted successfully"}
@@ -270,7 +271,8 @@ async def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
     new_menu = models.Menu(**menu.model_dump())
     db.add(new_menu)
     db.commit()
-    return {"message": "Menu created successfully"}
+    db.refresh(new_menu)
+    return {"message": "Menu created successfully", "id": new_menu.id}
 
 @router_v1.patch('/menus/{menu_id}')
 async def update_menu(menu_id: int, menu: MenuUpdate, db: Session = Depends(get_db)):
@@ -284,12 +286,16 @@ async def update_menu(menu_id: int, menu: MenuUpdate, db: Session = Depends(get_
 
 @router_v1.delete('/menus/{menu_id}')
 async def delete_menu(menu_id: int, db: Session = Depends(get_db)):
-    menu = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
-    if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
-    db.delete(menu)
-    db.commit()
-    return {"message": "Menu deleted successfully"}
+    try:
+        menu = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+        if not menu:
+            raise HTTPException(status_code=404, detail="Menu not found")
+        db.query(models.OrderItem).filter(models.OrderItem.menu_id == menu_id).delete()
+        db.delete(menu)
+        db.commit()
+        return {"message": "Menu deleted successfully"}
+    except AssertionError as ae:
+        raise HTTPException(status_code=400, detail=ae.args)
 
 # Order CRUD
 
@@ -371,10 +377,13 @@ async def delete_order(order_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Unable to reach database. Please try again later.")
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-
-    db.query(models.Order).filter(models.Order.id == order_id).delete()
-    db.commit()
-    return {"message": "Order deleted successfully"}
+    try:
+        db.query(models.Order).filter(models.Order.id == order_id).delete()
+        db.commit()
+        return {"message": "Order deleted successfully"}
+    except Exception as e:
+        print(f"ERROR ({inspect.stack()[0][3]}): {e}")
+        raise HTTPException(status_code=500, detail="Unable to reach database. Please try again later.")
 
 
 app.include_router(router_v1)
