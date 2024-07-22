@@ -1,0 +1,23 @@
+meta {
+  name: Create menu
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8000/api/v1/menus
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "name": "Latte",
+      "price": 3.50,
+      "image": "https://example.com/coffee.jpg"
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Update book
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8000/api/v1/books/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "year": 1938,
+      "categories": [3]
+  }
+}

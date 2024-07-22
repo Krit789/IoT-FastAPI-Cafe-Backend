@@ -1,0 +1,21 @@
+meta {
+  name: Update menu
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8000/api/v1/menus/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "price": 2.75
+  }
+}

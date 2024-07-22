@@ -1,0 +1,27 @@
+meta {
+  name: Create a book
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8000/api/v1/books
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "year": 1937,
+      "is_published": true,
+      "summary": "A fantasy novel and the prequel to The Lord of the Rings.",
+      "details": "The story follows the quest of home-loving hobbit Bilbo Baggins...",
+      "categories": [1, 2]
+  }
+}

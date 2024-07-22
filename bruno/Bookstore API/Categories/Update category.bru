@@ -1,0 +1,21 @@
+meta {
+  name: Update category
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8000/api/v1/categories/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "detail": "Exciting stories about magic and adventure."
+  }
+}

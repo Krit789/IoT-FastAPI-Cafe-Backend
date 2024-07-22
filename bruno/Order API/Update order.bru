@@ -1,0 +1,36 @@
+meta {
+  name: Update order
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8000/api/v1/orders/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "first_name": "Jane",
+      "phone": "+15557654321",
+      "order_items": [
+          {
+              "menu_id": 1,
+              "amount": 1,
+              "price": 10.99,
+              "additional_info": "No onions"
+          },
+          {
+              "menu_id": 3,
+              "amount": 2,
+              "price": 7.99,
+              "additional_info": null
+          }
+      ]
+  }
+}
