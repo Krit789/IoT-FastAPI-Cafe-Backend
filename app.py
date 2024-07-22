@@ -27,7 +27,7 @@ def get_db():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://65070030-iot-cafe.vercel.app/"],
+    allow_origins=["https://65070030-iot-cafe.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
