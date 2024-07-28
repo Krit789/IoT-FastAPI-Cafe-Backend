@@ -49,6 +49,7 @@ class Menu(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    details = Column(String, nullable=True)
     price = Column(Float, nullable=False)
     image = Column(String, nullable=True)
     created_on = Column(DateTime(timezone=True), default=datetime.datetime.now(datetime.UTC), nullable=False)

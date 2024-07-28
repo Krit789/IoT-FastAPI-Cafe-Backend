@@ -102,6 +102,7 @@ class BookUpdate(BookBase):
 
 class MenuBase(BaseModel):
     name: str
+    details: str | None = None
     price: float
     image: str | None = None
 
@@ -111,7 +112,6 @@ class MenuCreate(MenuBase):
 class MenuUpdate(MenuBase):
     name: str | None = None
     price: float | None = None
-    image: str | None = None
 
 class MenuRead(MenuBase):
     id: int
