@@ -12,7 +12,7 @@
       "dest": "app.py",
       "methods": ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
       "headers": {
-        "Access-Control-Allow-Origin": "65070030-iot-cafe.vercel.app",
+        "Access-Control-Allow-Origin": "https://65070030-iot-cafe.vercel.app",
         "x-robots-tag": "noindex"
       }
     }
