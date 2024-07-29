@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session, joinedload
 from pydantic import BaseModel, Field, field_validator
 from typing import List
+from starlette.responses import FileResponse 
 
 # Import models
 from database import SessionLocal, engine
@@ -301,7 +302,7 @@ async def delete_menu(menu_id: int, db: Session = Depends(get_db)):
 
 @router_v1.get('/orders', response_model=List[OrderRead])
 async def get_orders(db: Session = Depends(get_db)):
-    orders = db.query(models.Order).options(joinedload(models.Order.order_items).joinedload(models.OrderItem.menu)).all() 
+    orders = db.query(models.Order).options(joinedload(models.Order.order_items).joinedload(models.OrderItem.menu)).order_by(models.Order.id.desc()).all() 
     return orders
 
 @router_v1.get('/orders/{order_id}', response_model=OrderRead)
@@ -385,6 +386,9 @@ async def delete_order(order_id: int, db: Session = Depends(get_db)):
         print(f"ERROR ({inspect.stack()[0][3]}): {e}")
         raise HTTPException(status_code=500, detail="Unable to reach database. Please try again later.")
 
+@app.get('/robots.txt')
+async def preventIndexing():
+    return FileResponse('static/robots.txt')
 
 app.include_router(router_v1)
 
