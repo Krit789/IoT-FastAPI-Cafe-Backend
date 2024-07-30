@@ -258,7 +258,7 @@ async def delete_category(category_id: int, db: Session = Depends(get_db)):
 
 @router_v1.get('/menus', response_model=List[MenuRead])
 async def get_menus(db: Session = Depends(get_db)):
-    return db.query(models.Menu).all()
+    return db.query(models.Menu).order_by(models.Menu.name.asc()).all()
 
 @router_v1.get('/menus/{menu_id}', response_model=MenuRead)
 async def get_menu(menu_id: int, db: Session = Depends(get_db)):
